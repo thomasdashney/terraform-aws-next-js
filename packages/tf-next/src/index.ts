@@ -9,16 +9,21 @@ yargs.command(
         type: 'boolean',
         description: 'Runs the build in the current working directory',
       })
+      .option('skipInstall', {
+        type: 'boolean',
+        description: 'Skip npm/yarn install step',
+      })
       .option('verbose', {
         type: 'boolean',
         description: 'Run with verbose logging',
       });
   },
-  async ({ skipDownload, verbose }) => {
+  async ({ skipDownload, skipInstall, verbose }) => {
     const cwd = process.cwd();
 
     (await import('./commands/build')).default({
       skipDownload,
+      skipInstall,
       logLevel: verbose ? 'verbose' : 'none',
       cwd,
     });

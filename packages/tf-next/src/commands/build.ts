@@ -146,6 +146,7 @@ function writeOutput(props: OutputProps) {
 
 interface BuildProps {
   skipDownload?: boolean;
+  skipInstall?: boolean;
   logLevel?: 'verbose' | 'none';
   deleteBuildCache?: boolean;
   cwd: string;
@@ -154,6 +155,7 @@ interface BuildProps {
 
 async function buildCommand({
   skipDownload = false,
+  skipInstall = false,
   logLevel,
   deleteBuildCache = true,
   cwd,
@@ -197,7 +199,10 @@ async function buildCommand({
       workPath,
       repoRootPath: mode === 'download' ? tmpDir!.name : repoRootPath,
       entrypoint,
-      config: { sharedLambdas: true },
+      config: {
+        sharedLambdas: true,
+        installCommand: skipInstall ? ' ' : undefined,
+      },
       meta: {
         isDev: false,
         // @ts-ignore
